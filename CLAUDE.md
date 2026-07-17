@@ -20,3 +20,6 @@ This repository contains my capstone project for the FlyRank Front-end AI Engine
 - Node.js
 - Git
 - VS Code
+## Learning Objectives
+
+This repository will be used to practice Git, GitHub, Node.js, and AI-assisted frontend development.
