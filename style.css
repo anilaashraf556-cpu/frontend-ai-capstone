@@ -1,0 +1,185 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #ffffff; /* page background stays neutral */
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+  margin: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.settings-card {
+  background: #eaf1fb;              /* light color only behind the form */
+  border: 2px solid #1c4e80;        /* dark border, same blue family */
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+.section {
+  margin-bottom: 18px;
+}
+
+.section.bordered {
+  border-top: 1px solid #1c4e80;
+  padding-top: 16px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #123456;
+}
+
+.section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 13px;
+  color: #2b4c6f;
+}
+
+.required {
+  color: #b3261e;
+}
+
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-preview {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #1c4e80;
+  object-fit: cover;
+  background: #ffffff;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"],
+select {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-family: inherit;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #1c4e80;
+  background: #ffffff;
+  color: #123456;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+  outline: none;
+  border-color: #123456;
+  box-shadow: 0 0 0 2px rgba(28, 78, 128, 0.25);
+}
+
+input.input-error {
+  border-color: #b3261e;
+  box-shadow: 0 0 0 2px rgba(179, 38, 30, 0.15);
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #123456;
+  cursor: pointer;
+}
+
+.toggle-row input[type="checkbox"] {
+  width: auto;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  flex: 1;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #1c4e80;
+  background: #1c4e80;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #123456;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Popup message */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-overlay.active {
+  display: flex;
+}
+
+.popup-box {
+  background: #eaf1fb;
+  border: 2px solid #1c4e80;
+  border-radius: 12px;
+  padding: 20px 24px;
+  max-width: 320px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.popup-box p {
+  font-size: 14px;
+  color: #123456;
+  margin: 0 0 16px;
+}
+
+.popup-box .btn-primary {
+  flex: none;
+  padding: 8px 24px;
+}
