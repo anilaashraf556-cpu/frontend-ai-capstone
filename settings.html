@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings Form</title>
+  <link rel="stylesheet" href="settings-style.css">
+</head>
+<body>
+
+  <div class="settings-card">
+    <h2 class="sr-only">Settings form with profile, notification, and privacy options</h2>
+
+    <div class="section">
+      <p class="section-title">Profile</p>
+      <div class="section-body">
+        <div class="form-group">
+          <label for="displayName">Display name</label>
+          <input type="text" id="displayName" placeholder="Jane Doe">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="jane@company.com">
+        </div>
+        <div class="form-group">
+          <label for="language">Language</label>
+          <select id="language">
+            <option>English</option>
+            <option>Spanish</option>
+            <option>French</option>
+            <option>German</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section bordered">
+      <p class="section-title">Notifications</p>
+      <div class="section-body">
+        <label class="toggle-row">
+          Email notifications
+          <input type="checkbox" id="emailNotif" checked>
+        </label>
+        <label class="toggle-row">
+          Push notifications
+          <input type="checkbox" id="pushNotif">
+        </label>
+        <label class="toggle-row">
+          Weekly digest
+          <input type="checkbox" id="weeklyDigest" checked>
+        </label>
+      </div>
+    </div>
+
+    <div class="section bordered">
+      <p class="section-title">Privacy</p>
+      <label class="toggle-row">
+        Make profile public
+        <input type="checkbox" id="publicProfile">
+      </label>
+    </div>
+
+    <button type="button" id="saveBtn">Save settings</button>
+    <p id="statusMsg">Settings saved</p>
+  </div>
+
+  <script src="settings-script.js"></script>
+</body>
+</html>
