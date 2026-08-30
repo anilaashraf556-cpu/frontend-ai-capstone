@@ -29,7 +29,7 @@ function App() {
     setResult(null);
 
     try {
-      const response = await fetch("http://localhost:3001/api/care-plan", {
+      const response = await fetch("/api/care-plan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +60,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-green-50 text-gray-900">
-      {/* Header */}
       <header className="border-b bg-white">
         <nav
           className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5"
@@ -76,9 +75,7 @@ function App() {
         </nav>
       </header>
 
-      {/* Main */}
       <main className="mx-auto max-w-6xl px-6 py-10">
-        {/* Hero */}
         <section className="mb-10 text-center">
           <p className="mb-2 font-semibold text-green-700">
             AI-Powered Plant Care
@@ -94,9 +91,7 @@ function App() {
           </p>
         </section>
 
-        {/* Application */}
         <div className="grid gap-8 md:grid-cols-2">
-          {/* Form */}
           <section className="rounded-2xl bg-white p-6 shadow-sm">
             <h2 className="mb-2 text-2xl font-bold">
               Tell Us About Your Plant
@@ -108,12 +103,8 @@ function App() {
             </p>
 
             <div className="space-y-5">
-              {/* Plant */}
               <div>
-                <label
-                  htmlFor="plant"
-                  className="mb-2 block font-medium"
-                >
+                <label htmlFor="plant" className="mb-2 block font-medium">
                   Plant name <span aria-hidden="true">*</span>
                 </label>
 
@@ -131,12 +122,8 @@ function App() {
                 />
               </div>
 
-              {/* Problem */}
               <div>
-                <label
-                  htmlFor="problem"
-                  className="mb-2 block font-medium"
-                >
+                <label htmlFor="problem" className="mb-2 block font-medium">
                   What is happening?{" "}
                   <span className="font-normal text-gray-500">
                     (optional)
@@ -158,7 +145,6 @@ function App() {
                 </p>
               </div>
 
-              {/* Error */}
               {error && (
                 <div
                   role="alert"
@@ -168,19 +154,19 @@ function App() {
                 </div>
               )}
 
-              {/* Button */}
               <button
                 type="button"
                 onClick={generateCarePlan}
                 disabled={loading}
                 className="w-full rounded-lg bg-green-700 px-5 py-3 font-semibold text-white transition hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-200 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading ? "Creating your care plan..." : "Generate Care Plan 🌱"}
+                {loading
+                  ? "Creating your care plan..."
+                  : "Generate Care Plan 🌱"}
               </button>
             </div>
           </section>
 
-          {/* Results */}
           <section
             className="rounded-2xl bg-white p-6 shadow-sm"
             aria-live="polite"
@@ -189,7 +175,6 @@ function App() {
               Your Plant Care Plan
             </h2>
 
-            {/* Empty state */}
             {!result && !loading && (
               <div className="flex min-h-[420px] items-center justify-center rounded-xl bg-green-50 p-6 text-center">
                 <div>
@@ -208,7 +193,6 @@ function App() {
               </div>
             )}
 
-            {/* Loading */}
             {loading && (
               <div className="flex min-h-[420px] items-center justify-center rounded-xl bg-green-50 p-6 text-center">
                 <div>
@@ -227,66 +211,39 @@ function App() {
               </div>
             )}
 
-            {/* Result */}
             {result && !loading && (
               <div className="space-y-5">
-                {/* Summary */}
                 <div className="rounded-xl bg-green-50 p-5">
-                  <h3 className="mb-2 font-bold">
-                    🌱 Overview
-                  </h3>
+                  <h3 className="mb-2 font-bold">🌱 Overview</h3>
 
-                  <p className="text-gray-700">
-                    {result.summary}
-                  </p>
+                  <p className="text-gray-700">{result.summary}</p>
                 </div>
 
-                {/* Environment */}
                 <div>
                   <h3 className="font-bold">🏡 Environment</h3>
-
-                  <p className="text-gray-700">
-                    {result.environment}
-                  </p>
+                  <p className="text-gray-700">{result.environment}</p>
                 </div>
 
-                {/* Lighting */}
                 <div>
                   <h3 className="font-bold">☀️ Light</h3>
-
-                  <p className="text-gray-700">
-                    {result.lighting}
-                  </p>
+                  <p className="text-gray-700">{result.lighting}</p>
                 </div>
 
-                {/* Watering */}
                 <div>
                   <h3 className="font-bold">💧 Watering</h3>
-
-                  <p className="text-gray-700">
-                    {result.watering}
-                  </p>
+                  <p className="text-gray-700">{result.watering}</p>
                 </div>
 
-                {/* Soil */}
                 <div>
                   <h3 className="font-bold">🪴 Soil</h3>
-
-                  <p className="text-gray-700">
-                    {result.soil}
-                  </p>
+                  <p className="text-gray-700">{result.soil}</p>
                 </div>
 
-                {/* Temperature */}
                 <div>
                   <h3 className="font-bold">🌡️ Temperature</h3>
-
-                  <p className="text-gray-700">
-                    {result.temperature}
-                  </p>
+                  <p className="text-gray-700">{result.temperature}</p>
                 </div>
 
-                {/* Problem */}
                 {result.problemAnalysis && (
                   <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
                     <h3 className="mb-2 font-bold">
@@ -299,11 +256,8 @@ function App() {
                   </div>
                 )}
 
-                {/* Tips */}
                 <div>
-                  <h3 className="mb-2 font-bold">
-                    🌿 Care Tips
-                  </h3>
+                  <h3 className="mb-2 font-bold">🌿 Care Tips</h3>
 
                   <ul className="list-disc space-y-2 pl-5 text-gray-700">
                     {result.tips.map((tip, index) => (
@@ -312,7 +266,6 @@ function App() {
                   </ul>
                 </div>
 
-                {/* Disclaimer */}
                 <div className="border-t pt-4">
                   <p className="text-xs leading-relaxed text-gray-500">
                     AI-generated information is for general plant-care
@@ -326,7 +279,6 @@ function App() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="mt-12 border-t bg-white py-6 text-center text-sm text-gray-500">
         PlantCare AI • AI-enhanced frontend capstone
       </footer>
