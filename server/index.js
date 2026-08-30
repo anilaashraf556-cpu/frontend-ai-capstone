@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -12,8 +13,12 @@ dotenv.config({ path: ".env.local" });
 
 const app = express();
 
+// Basic API protection
+const MAX_PLANT_LENGTH = 100;
+const MAX_PROBLEM_LENGTH = 1000;
+
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 const apiKey = process.env.GEMINI_API_KEY;
 
@@ -29,9 +34,35 @@ app.post("/api/care-plan", async (req, res) => {
   try {
     const { plant, problem } = req.body;
 
-    if (!plant || !plant.trim()) {
+    // Plant name validation
+    if (!plant || typeof plant !== "string" || !plant.trim()) {
       return res.status(400).json({
         error: "Plant name is required.",
+      });
+    }
+
+    // Plant name length protection
+    if (plant.trim().length > MAX_PLANT_LENGTH) {
+      return res.status(400).json({
+        error: `Plant name must be ${MAX_PLANT_LENGTH} characters or fewer.`,
+      });
+    }
+
+    // Problem validation
+    if (
+      problem !== undefined &&
+      problem !== null &&
+      typeof problem !== "string"
+    ) {
+      return res.status(400).json({
+        error: "Plant problem must be text.",
+      });
+    }
+
+    // Problem length protection
+    if (problem && problem.trim().length > MAX_PROBLEM_LENGTH) {
+      return res.status(400).json({
+        error: `Problem description must be ${MAX_PROBLEM_LENGTH} characters or fewer.`,
       });
     }
 
@@ -40,9 +71,13 @@ You are PlantCare AI, a helpful plant-care assistant for beginner plant owners.
 
 The user wants help caring for this plant:
 
-Plant name: ${plant}
+Plant name: ${plant.trim()}
 
-${problem ? `The user reports this problem: ${problem}` : "The user has not reported a specific problem."}
+${
+  problem?.trim()
+    ? `The user reports this problem: ${problem.trim()}`
+    : "The user has not reported a specific problem."
+}
 
 Create a simple and practical care plan.
 
@@ -83,7 +118,11 @@ Important:
     });
 
     const text = response.text;
-    const result = parseGeminiJsonResponse(text, buildFallbackCarePlan(plant, problem));
+
+    const result = parseGeminiJsonResponse(
+      text,
+      buildFallbackCarePlan(plant, problem)
+    );
 
     res.json(result);
   } catch (error) {
