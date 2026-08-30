@@ -1,234 +1,279 @@
-PlantCare AI 🌱
+# 🌱 PlantCare AI
 
-PlantCare AI is a small AI-enhanced web application that helps beginner plant owners create simple, practical care plans for their plants. Users enter a plant name and can optionally describe a problem, and the application uses Google's Gemini AI to generate personalized guidance about environment, lighting, watering, soil, temperature, possible problem causes, and practical tips. I chose this idea because plant care can be confusing for beginners, and AI can turn general plant-care knowledge into easy-to-understand guidance.
+PlantCare AI is an AI-powered plant-care assistant designed for beginner plant owners. Users enter a plant name and optionally describe a problem, and the application uses Google's Gemini AI to generate a simple, personalized care plan covering environment, lighting, watering, soil, temperature, possible problem causes, and practical care tips. I chose this idea because plant owners often need simple guidance without having to understand technical horticultural information.
 
-Live Application
+## 🚀 Live Application
 
-Production URL:
 https://frontend-ai-capstone-tau.vercel.app/
 
-GitHub Repository:
+## 📦 Repository
+
 https://github.com/anilaashraf556-cpu/frontend-ai-capstone
 
-Features
-🌱 Generate an AI-powered plant care plan
-🔍 Optional plant-problem analysis
-💡 Lighting, watering, soil, temperature, and environment guidance
-⚠️ Safe handling of possible plant problems without claiming a definite diagnosis
-📱 Responsive interface for desktop and mobile
-♿ Accessibility-focused interface
-❌ Error handling when the AI service is unavailable
-⚡ Production deployment on Vercel
-Technology Stack
-React
-TypeScript
-Vite
-Node.js
-Express
-Google Gemini API
-Vercel
-Git/GitHub
-How to Run Locally
-1. Clone the repository
+## ✨ Features
+
+* AI-generated plant care plans
+* Plant problem analysis with possible causes
+* Simple beginner-friendly recommendations
+* Environment, lighting, watering, soil, and temperature guidance
+* Practical care tips
+* Required-field validation
+* Error handling for failed AI requests
+* Responsive interface for desktop and mobile
+* Accessible form controls and error messages
+* AI-generated information disclaimer
+
+## 🛠️ Technology Stack
+
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+* Node.js
+* Express
+* Google Gemini AI
+* Vitest
+* Vercel
+
+## 🏗️ Architecture
+
+The application consists of a React frontend and an AI API endpoint.
+
+### Frontend
+
+The React application is located in `src/`.
+
+`App.tsx`:
+
+* Collects the plant name and optional problem description.
+* Validates the required plant name.
+* Sends the user's information to `/api/care-plan`.
+* Displays loading and error states.
+* Displays the generated care plan.
+
+### AI API
+
+The production API is located in `api/care-plan.js`.
+
+The API:
+
+1. Receives the plant name and optional problem.
+2. Validates the request.
+3. Sends a structured prompt to Gemini.
+4. Requests a JSON response.
+5. Parses the AI response.
+6. Returns the care plan to the frontend.
+7. Returns a safe error message if the request fails.
+
+The original Express server in `server/index.js` is used for local development/testing.
+
+## 🤖 AI Integration
+
+PlantCare AI uses Google's Gemini model to generate practical plant-care guidance.
+
+The AI receives:
+
+* Plant name
+* Optional description of the plant's problem
+
+The prompt instructs the model to:
+
+* Use beginner-friendly language.
+* Provide practical care recommendations.
+* Return structured JSON.
+* Avoid claiming to diagnose plant diseases with certainty.
+* Provide possible causes rather than definite diagnoses.
+* Keep each section concise.
+
+The structured response contains:
+
+* Summary
+* Environment
+* Lighting
+* Watering
+* Soil
+* Temperature
+* Problem analysis
+* Four care tips
+
+The AI is therefore used to solve the application's main problem rather than functioning as a generic chatbot.
+
+## ▶️ Local Setup
+
+### 1. Clone the repository
+
+```bash
 git clone https://github.com/anilaashraf556-cpu/frontend-ai-capstone.git
 cd frontend-ai-capstone
-2. Install dependencies
+```
+
+### 2. Install dependencies
+
+```bash
 npm install
-3. Configure the AI API key
+```
 
-Create a .env.local file in the project root:
+### 3. Configure the Gemini API key
 
-GEMINI_API_KEY=your_api_key_here
+Create a `.env.local` file in the project root:
 
-Never commit your API key to GitHub.
+```env
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-4. Start the frontend
+Never commit the API key to GitHub.
+
+### 4. Run the frontend
+
+```bash
 npm run dev
+```
 
-The Vite development server will provide the local application URL.
+### 5. Run the local API server
 
-5. Start the AI server
+In another terminal:
 
-In a separate terminal:
-
+```bash
 node server/index.js
+```
 
-The Express server runs the AI care-plan endpoint locally.
+The local API server runs on:
 
-Architecture Overview
+```text
+http://localhost:3001
+```
 
-The application has two main parts:
+## 🧪 Testing
 
-Frontend
+Vitest is used for automated testing.
 
-The React + TypeScript frontend collects the user's plant information and displays the generated care plan.
+The project includes tests for:
 
-Main responsibilities:
+* Empty plant-name validation
+* Valid plant-name input
+* Plant problem description input
 
-User input
-Form validation
-Loading states
-Error states
-Displaying the AI-generated care plan
-Accessible and responsive UI
-Backend
+Test command:
 
-The Express server provides the /api/care-plan endpoint.
-
-Its responsibilities are:
-
-Receive the plant name and optional problem
-Validate the request
-Send a structured prompt to Gemini
-Request JSON output
-Parse the AI response
-Return the care-plan data to the frontend
-Return a safe error message if generation fails
-AI Integration
-
-PlantCare AI uses the Google Gemini API to generate the care plans.
-
-The AI is used for a specific purpose rather than as a general chatbot. It transforms a user's plant name and optional problem description into a structured care plan.
-
-The prompt asks the model to return:
-
-Summary
-Environment
-Lighting
-Watering
-Soil
-Temperature
-Problem analysis
-Four practical tips
-
-The application requests JSON output so the frontend can reliably display each section.
-
-The prompt also instructs the model to:
-
-Use simple language for beginners
-Keep information concise and practical
-Avoid claiming to diagnose plant diseases with certainty
-Provide possible causes rather than definite diagnoses
-Resilience and Error Handling
-
-The application validates required input before sending an AI request.
-
-If the AI request fails or returns an invalid/empty response, the backend returns a safe error response instead of exposing technical details to the user.
-
-The interface also provides an error state so users know that the care plan could not be generated and can try again.
-
-Testing
-
-The project uses automated tests to verify important application behavior.
-
-Testing includes:
-
-Input validation
-Required-field validation
-Error handling
-
-Tests are run with:
-
+```bash
 npx vitest run
+```
 
-The tests were executed successfully during the production-readiness work.
+Latest test result:
 
-Accessibility
+```text
+Test Files  1 passed
+Tests       3 passed
+```
 
-Accessibility was checked during the project using accessibility testing tools and keyboard testing.
+A screenshot of the test output is included in the repository as:
 
-The application was reviewed for:
+`test-results.png`
 
-Keyboard accessibility
-Form usability
-Required-field feedback
-Color/contrast issues
-Accessible interaction states
-Responsive behavior
+## ♿ Accessibility
 
-The WAVE audit reported:
+The application was tested using accessibility auditing tools.
 
-0 errors
-0 contrast errors
-0 alerts
+Latest results:
 
-A concrete improvement made during the audit process was improving keyboard accessibility and interaction states.
+* Lighthouse Accessibility: **100%**
+* Lighthouse Performance: **96%**
+* WAVE accessibility audit: completed with no WCAG AA errors identified during testing
 
-Performance
+Accessibility improvements included:
 
-The application was checked with Lighthouse.
+* Proper labels for form inputs
+* Keyboard-focus styles
+* Accessible error messages using `role="alert"`
+* Live result updates using `aria-live`
+* Decorative emojis marked with `aria-hidden`
+* Responsive layout for smaller screens
+* Sufficient readable text and clear form controls
 
-The Lighthouse audit evidence is included in the repository:
+## ⚡ Performance
 
-lighthouse-audit.png
+The latest Lighthouse audit achieved:
 
-Performance and accessibility were reviewed as part of the production-readiness process.
+* **Performance: 96%**
+* **Accessibility: 100%**
 
-Deployment
+The audit screenshot is included in the repository as:
 
-The application is deployed to Vercel.
+`lighthouse-audit.png`
+
+## 🛡️ Error Handling & Safe Failure
+
+The application handles several failure cases:
+
+* Empty plant name → validation message
+* Failed API request → user-friendly error message
+* Missing Gemini API key → server configuration error
+* Empty AI response → server error handling
+* Invalid AI JSON → caught by the API error handler
+* AI-generated advice includes a disclaimer explaining that it is general guidance
+
+The application does not expose the Gemini API key in the frontend.
+
+## 🚀 Deployment
+
+The application is deployed on Vercel.
 
 Production URL:
 
 https://frontend-ai-capstone-tau.vercel.app/
 
-Deployment was tested by opening the production application and generating a care plan successfully.
+The production API uses the `GEMINI_API_KEY` environment variable configured in Vercel.
 
-Deployment Checklist
+### Deployment Checklist
 
-Application builds successfully
+* [x] Application builds successfully
+* [x] Production deployment completed
+* [x] Production URL tested
+* [x] AI care-plan generation tested
+* [x] Error state tested
+* [x] Accessibility audited
+* [x] Lighthouse performance audited
+* [x] Automated tests passing
+* [x] API key stored as an environment variable
+* [x] Source code pushed to GitHub
 
-Application deployed to production
+### Rollback Plan
 
-Production URL tested
+If a production deployment introduces a problem, the previous working Vercel deployment can be restored/redeployed. GitHub `main` contains the production source code and provides the history needed to identify or revert changes.
 
-AI care-plan generation tested
+## ⚠️ Known Limitations
 
-Form validation tested
+* AI recommendations are general guidance and may not account for every plant variety or local growing condition.
+* The application does not use an image to identify plants.
+* AI responses depend on the availability of the Gemini API.
+* The application does not replace advice from a qualified horticultural professional.
+* There is currently no user account or saved care-plan history.
 
-Error handling tested
-
-Accessibility reviewed
-
-Lighthouse audit completed
-
-Mobile behavior checked
-
-GitHub repository updated
-
-Environment secrets kept out of source control
-
-Rollback and Monitoring
-
-The project is maintained through GitHub and deployed through Vercel.
-
-If a production deployment introduces a problem, the rollback approach is:
-
-Identify the problematic commit or deployment.
-Restore the last known working version.
-Push the corrected version to the main branch.
-Vercel automatically creates a new production deployment.
-
-For a small capstone project, Vercel deployment history and Git history provide the basic monitoring and rollback workflow.
-
-Known Limitations
-AI-generated plant-care information may not always be completely accurate.
-The application does not replace professional horticultural advice.
-The application currently relies on the Gemini API being available.
-Plant-specific recommendations may vary depending on location, season, plant variety, and growing conditions.
-The application does not currently store user care plans.
-Future Improvements
+## 🔮 Future Improvements
 
 Possible future improvements include:
 
-Saving care plans for returning users
-Adding plant image recognition
-Adding reminders for watering and plant care
-Providing location-aware seasonal recommendations
-Adding more detailed plant profiles
-Improving AI response streaming for faster perceived response time
-Project Context
+* Plant image identification
+* Saving previous care plans
+* User accounts
+* Plant-care reminders
+* More detailed regional/environmental recommendations
+* Additional automated end-to-end tests
+* Improved monitoring and analytics
 
-This project was created as the capstone project for the FlyRank Front-end AI Engineering Internship.
+## 📚 Project Context
 
-The project demonstrates frontend development, AI integration, accessibility, testing, error handling, performance auditing, deployment, and production-readiness practices.
+This project was developed as the capstone project for the **FlyRank Front-end AI Engineering Internship**.
+
+The project demonstrates:
+
+* Accessible frontend development
+* AI integration
+* Resilient error handling
+* Automated testing
+* Performance optimization
+* Production deployment
+* Technical documentation
+* Reflection on the development process
+
+
