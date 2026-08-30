@@ -3,12 +3,12 @@ import { GoogleGenAI } from "@google/genai";
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
-      error: "Method not allowed",
+      error: "Method not allowed.",
     });
   }
 
   try {
-    const { plant, problem } = req.body;
+    const { plant, problem } = req.body || {};
 
     if (!plant || !plant.trim()) {
       return res.status(400).json({
@@ -45,6 +45,7 @@ ${
 Create a simple and practical care plan.
 
 Return ONLY valid JSON using this exact structure:
+
 {
   "summary": "short overview of the plant and its general care",
   "environment": "where this plant generally grows best and suitable environment",

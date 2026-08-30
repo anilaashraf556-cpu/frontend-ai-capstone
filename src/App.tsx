@@ -35,8 +35,8 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          plant,
-          problem,
+          plant: plant.trim(),
+          problem: problem.trim(),
         }),
       });
 
@@ -51,7 +51,9 @@ function App() {
       console.error(err);
 
       setError(
-        "We couldn't generate your care plan. Please check your connection and try again."
+        err instanceof Error
+          ? err.message
+          : "We couldn't generate your care plan. Please try again."
       );
     } finally {
       setLoading(false);
@@ -215,7 +217,6 @@ function App() {
               <div className="space-y-5">
                 <div className="rounded-xl bg-green-50 p-5">
                   <h3 className="mb-2 font-bold">🌱 Overview</h3>
-
                   <p className="text-gray-700">{result.summary}</p>
                 </div>
 
