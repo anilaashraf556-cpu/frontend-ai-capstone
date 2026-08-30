@@ -27,47 +27,37 @@ export default async function handler(req, res) {
 
     const ai = new GoogleGenAI({
       apiKey,
+      httpOptions: {
+        timeout: 30000,
+      },
     });
 
     const prompt = `
-You are PlantCare AI, a helpful plant-care assistant for beginner plant owners.
+You are PlantCare AI.
 
-The user wants help caring for this plant:
+Create a short, practical plant care plan for a beginner.
 
-Plant name: ${plant}
+Plant: ${plant.trim()}
 
-${
-  problem
-    ? `The user reports this problem: ${problem}`
-    : "The user has not reported a specific problem."
-}
+Problem:
+${problem?.trim() || "No specific problem reported."}
 
-Create a simple and practical care plan.
-
-Return ONLY valid JSON using this exact structure:
+Return ONLY valid JSON:
 
 {
-  "summary": "short overview of the plant and its general care",
-  "environment": "where this plant generally grows best and suitable environment",
-  "lighting": "simple lighting guidance",
-  "watering": "simple watering guidance",
-  "soil": "simple soil and drainage guidance",
-  "temperature": "simple temperature guidance",
-  "problemAnalysis": "if a problem was provided, explain possible causes and safe actions; otherwise return an empty string",
-  "tips": [
-    "tip 1",
-    "tip 2",
-    "tip 3",
-    "tip 4"
-  ]
+  "summary": "short overview",
+  "environment": "best environment",
+  "lighting": "lighting advice",
+  "watering": "watering advice",
+  "soil": "soil and drainage advice",
+  "temperature": "temperature advice",
+  "problemAnalysis": "possible causes and safe actions, or empty string",
+  "tips": ["tip 1", "tip 2", "tip 3", "tip 4"]
 }
 
-Important:
-- Use simple language suitable for beginners.
-- Do not assume the user knows technical plant-care terms.
-- Do not claim to diagnose a plant disease with certainty.
-- If discussing a plant problem, provide possible causes rather than a definite diagnosis.
-- Keep each section concise and practical.
+Keep every field concise.
+Do not diagnose diseases with certainty.
+Use simple language.
 `;
 
     const response = await ai.models.generateContent({
@@ -75,23 +65,26 @@ Important:
       contents: prompt,
       config: {
         responseMimeType: "application/json",
+        maxOutputTokens: 700,
+        temperature: 0.3,
       },
     });
 
     const text = response.text;
 
     if (!text) {
-      throw new Error("AI returned an empty response.");
+      throw new Error("Gemini returned an empty response.");
     }
 
     const result = JSON.parse(text);
 
     return res.status(200).json(result);
   } catch (error) {
-    console.error("AI error:", error);
+    console.error("Care plan API error:", error);
 
     return res.status(500).json({
-      error: "Unable to generate the care plan right now.",
+      error:
+        "The AI service is temporarily unavailable. Please try again in a moment.",
     });
   }
 }

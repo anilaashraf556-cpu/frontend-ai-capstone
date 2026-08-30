@@ -40,15 +40,25 @@ function App() {
         }),
       });
 
+      const contentType = response.headers.get("content-type") || "";
+
+      if (!contentType.includes("application/json")) {
+        throw new Error(
+          "The AI service did not return a valid response. Please try again."
+        );
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Something went wrong.");
+        throw new Error(
+          data.error || "Unable to generate the care plan."
+        );
       }
 
       setResult(data);
     } catch (err) {
-      console.error(err);
+      console.error("Care plan error:", err);
 
       setError(
         err instanceof Error
@@ -62,6 +72,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-green-50 text-gray-900">
+      {/* Header */}
       <header className="border-b bg-white">
         <nav
           className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5"
@@ -77,7 +88,9 @@ function App() {
         </nav>
       </header>
 
+      {/* Main */}
       <main className="mx-auto max-w-6xl px-6 py-10">
+        {/* Hero */}
         <section className="mb-10 text-center">
           <p className="mb-2 font-semibold text-green-700">
             AI-Powered Plant Care
@@ -93,7 +106,9 @@ function App() {
           </p>
         </section>
 
+        {/* Application */}
         <div className="grid gap-8 md:grid-cols-2">
+          {/* Form */}
           <section className="rounded-2xl bg-white p-6 shadow-sm">
             <h2 className="mb-2 text-2xl font-bold">
               Tell Us About Your Plant
@@ -105,8 +120,12 @@ function App() {
             </p>
 
             <div className="space-y-5">
+              {/* Plant */}
               <div>
-                <label htmlFor="plant" className="mb-2 block font-medium">
+                <label
+                  htmlFor="plant"
+                  className="mb-2 block font-medium"
+                >
                   Plant name <span aria-hidden="true">*</span>
                 </label>
 
@@ -124,8 +143,12 @@ function App() {
                 />
               </div>
 
+              {/* Problem */}
               <div>
-                <label htmlFor="problem" className="mb-2 block font-medium">
+                <label
+                  htmlFor="problem"
+                  className="mb-2 block font-medium"
+                >
                   What is happening?{" "}
                   <span className="font-normal text-gray-500">
                     (optional)
@@ -147,6 +170,7 @@ function App() {
                 </p>
               </div>
 
+              {/* Error */}
               {error && (
                 <div
                   role="alert"
@@ -156,10 +180,12 @@ function App() {
                 </div>
               )}
 
+              {/* Button */}
               <button
                 type="button"
                 onClick={generateCarePlan}
                 disabled={loading}
+                aria-busy={loading}
                 className="w-full rounded-lg bg-green-700 px-5 py-3 font-semibold text-white transition hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-200 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading
@@ -169,6 +195,7 @@ function App() {
             </div>
           </section>
 
+          {/* Results */}
           <section
             className="rounded-2xl bg-white p-6 shadow-sm"
             aria-live="polite"
@@ -177,10 +204,14 @@ function App() {
               Your Plant Care Plan
             </h2>
 
-            {!result && !loading && (
+            {/* Empty state */}
+            {!result && !loading && !error && (
               <div className="flex min-h-[420px] items-center justify-center rounded-xl bg-green-50 p-6 text-center">
                 <div>
-                  <div className="mb-4 text-6xl" aria-hidden="true">
+                  <div
+                    className="mb-4 text-6xl"
+                    aria-hidden="true"
+                  >
                     🌱
                   </div>
 
@@ -195,10 +226,14 @@ function App() {
               </div>
             )}
 
+            {/* Loading */}
             {loading && (
               <div className="flex min-h-[420px] items-center justify-center rounded-xl bg-green-50 p-6 text-center">
                 <div>
-                  <div className="mb-4 text-5xl" aria-hidden="true">
+                  <div
+                    className="mb-4 text-5xl"
+                    aria-hidden="true"
+                  >
                     🌿
                   </div>
 
@@ -213,38 +248,106 @@ function App() {
               </div>
             )}
 
-            {result && !loading && (
+            {/* Error state */}
+            {error && !loading && (
+              <div className="flex min-h-[420px] items-center justify-center rounded-xl bg-red-50 p-6 text-center">
+                <div>
+                  <div
+                    className="mb-4 text-5xl"
+                    aria-hidden="true"
+                  >
+                    ⚠️
+                  </div>
+
+                  <p className="font-semibold text-red-700">
+                    We couldn't create your care plan.
+                  </p>
+
+                  <p className="mt-2 text-sm text-red-600">
+                    {error}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={generateCarePlan}
+                    className="mt-5 rounded-lg bg-green-700 px-5 py-2.5 font-semibold text-white transition hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-200"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Result */}
+            {result && !loading && !error && (
               <div className="space-y-5">
+                {/* Summary */}
                 <div className="rounded-xl bg-green-50 p-5">
-                  <h3 className="mb-2 font-bold">🌱 Overview</h3>
-                  <p className="text-gray-700">{result.summary}</p>
+                  <h3 className="mb-2 font-bold">
+                    🌱 Overview
+                  </h3>
+
+                  <p className="text-gray-700">
+                    {result.summary}
+                  </p>
                 </div>
 
+                {/* Environment */}
                 <div>
-                  <h3 className="font-bold">🏡 Environment</h3>
-                  <p className="text-gray-700">{result.environment}</p>
+                  <h3 className="font-bold">
+                    🏡 Environment
+                  </h3>
+
+                  <p className="text-gray-700">
+                    {result.environment}
+                  </p>
                 </div>
 
+                {/* Lighting */}
                 <div>
-                  <h3 className="font-bold">☀️ Light</h3>
-                  <p className="text-gray-700">{result.lighting}</p>
+                  <h3 className="font-bold">
+                    ☀️ Light
+                  </h3>
+
+                  <p className="text-gray-700">
+                    {result.lighting}
+                  </p>
                 </div>
 
+                {/* Watering */}
                 <div>
-                  <h3 className="font-bold">💧 Watering</h3>
-                  <p className="text-gray-700">{result.watering}</p>
+                  <h3 className="font-bold">
+                    💧 Watering
+                  </h3>
+
+                  <p className="text-gray-700">
+                    {result.watering}
+                  </p>
                 </div>
 
+                {/* Soil */}
                 <div>
-                  <h3 className="font-bold">🪴 Soil</h3>
-                  <p className="text-gray-700">{result.soil}</p>
+                  <h3 className="font-bold">
+                    🪴 Soil
+                  </h3>
+
+                  <p className="text-gray-700">
+                    {result.soil}
+                  </p>
                 </div>
 
+                {/* Temperature */}
                 <div>
-                  <h3 className="font-bold">🌡️ Temperature</h3>
-                  <p className="text-gray-700">{result.temperature}</p>
+                  <h3 className="font-bold">
+                    🌡️ Temperature
+                  </h3>
+
+                  <p className="text-gray-700">
+                    {result.temperature}
+                  </p>
                 </div>
 
+                {/* Problem */}
                 {result.problemAnalysis && (
                   <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
                     <h3 className="mb-2 font-bold">
@@ -257,8 +360,11 @@ function App() {
                   </div>
                 )}
 
+                {/* Tips */}
                 <div>
-                  <h3 className="mb-2 font-bold">🌿 Care Tips</h3>
+                  <h3 className="mb-2 font-bold">
+                    🌿 Care Tips
+                  </h3>
 
                   <ul className="list-disc space-y-2 pl-5 text-gray-700">
                     {result.tips.map((tip, index) => (
@@ -267,6 +373,7 @@ function App() {
                   </ul>
                 </div>
 
+                {/* Disclaimer */}
                 <div className="border-t pt-4">
                   <p className="text-xs leading-relaxed text-gray-500">
                     AI-generated information is for general plant-care
@@ -280,6 +387,7 @@ function App() {
         </div>
       </main>
 
+      {/* Footer */}
       <footer className="mt-12 border-t bg-white py-6 text-center text-sm text-gray-500">
         PlantCare AI • AI-enhanced frontend capstone
       </footer>
