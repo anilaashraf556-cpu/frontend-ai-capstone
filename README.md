@@ -4,7 +4,7 @@ PlantCare AI is an AI-powered plant-care assistant designed for beginner plant o
 
 ## 🚀 Live Application
 
-https://frontend-ai-capstone-tau.vercel.app/
+https://frontend-ai-capstone-liart.vercel.app/
 
 ## 📦 Repository
 
@@ -275,5 +275,67 @@ The project demonstrates:
 * Production deployment
 * Technical documentation
 * Reflection on the development process
+
+## 📊 V2 Evaluation Results
+
+The V2 version was evaluated by testing the main end-to-end user flow:
+
+**Plant information → AI request → Generated care plan**
+
+### Functional evaluation
+
+* Entered a valid plant name and generated a care plan successfully.
+* Tested the optional plant-problem description.
+* Confirmed that the generated response is displayed in separate care sections.
+* Confirmed that the application handles invalid or missing required input.
+* Confirmed that failed AI requests display a user-friendly error message.
+* Confirmed that the production application successfully generates care plans using the deployed AI API.
+
+### Example evaluation
+
+**Input:** `mango plant`
+
+**Result:** The application successfully generated a structured care plan covering the plant overview, environment, light, watering, soil, temperature, and practical care tips.
+
+> The V2 evaluation focuses on functional behavior rather than claiming an AI accuracy percentage, because no formal labeled evaluation dataset was created for this version.
+
+## 🧠 AI Development Disclosure
+
+AI tools were used during development to assist with coding, debugging, problem-solving, and implementation guidance. I reviewed and tested the resulting work and remained responsible for integrating the frontend, AI API, validation, error handling, accessibility improvements, testing, deployment, and final project decisions.
+
+The AI is part of the product itself: PlantCare AI uses Google's Gemini AI to generate the plant-care guidance returned to the user.
+
+## 🏗️ V2 Architecture Flow
+
+```text
+User
+  │
+  │ Plant name + optional problem
+  ▼
+React + TypeScript Frontend
+  │
+  │ POST /api/care-plan
+  ▼
+Vercel API Endpoint
+  │
+  │ Structured prompt
+  ▼
+Google Gemini AI
+  │
+  │ Structured care-plan response
+  ▼
+Vercel API
+  │
+  ▼
+React Frontend
+  │
+  ▼
+Personalized Plant Care Plan
+```
+
+## 🎯 Assignment 8.1 Demo
+
+A 3–5 minute live demonstration accompanies this README. The demo shows the complete PlantCare AI workflow, explains one important design decision, and discusses the current limitation that the application accepts text input but does not yet support plant-image uploads.
+
 
 
