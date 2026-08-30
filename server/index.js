@@ -2,6 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
+import {
+  GEMINI_MODEL,
+  buildFallbackCarePlan,
+  parseGeminiJsonResponse,
+} from "../lib/gemini.js";
 
 dotenv.config({ path: ".env.local" });
 
@@ -68,28 +73,24 @@ Important:
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash-lite",
+      model: GEMINI_MODEL,
       contents: prompt,
       config: {
         responseMimeType: "application/json",
+        maxOutputTokens: 700,
+        temperature: 0.3,
       },
     });
 
     const text = response.text;
-
-    if (!text) {
-      throw new Error("AI returned an empty response.");
-    }
-
-    const result = JSON.parse(text);
+    const result = parseGeminiJsonResponse(text, buildFallbackCarePlan(plant, problem));
 
     res.json(result);
   } catch (error) {
     console.error("AI error:", error);
 
-    res.status(500).json({
-      error: "Unable to generate the care plan right now.",
-    });
+    const fallbackPlan = buildFallbackCarePlan(plant, problem);
+    res.status(200).json(fallbackPlan);
   }
 });
 

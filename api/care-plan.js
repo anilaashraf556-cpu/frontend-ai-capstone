@@ -1,4 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
+import {
+  GEMINI_MODEL,
+  buildFallbackCarePlan,
+  parseGeminiJsonResponse,
+} from "../lib/gemini.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -61,7 +66,7 @@ Use simple language.
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
+      model: GEMINI_MODEL,
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -71,20 +76,17 @@ Use simple language.
     });
 
     const text = response.text;
-
-    if (!text) {
-      throw new Error("Gemini returned an empty response.");
-    }
-
-    const result = JSON.parse(text);
+    const result = parseGeminiJsonResponse(
+      text,
+      buildFallbackCarePlan(plant, problem)
+    );
 
     return res.status(200).json(result);
   } catch (error) {
     console.error("Care plan API error:", error);
 
-    return res.status(500).json({
-      error:
-        "The AI service is temporarily unavailable. Please try again in a moment.",
-    });
+    return res.status(200).json(
+      buildFallbackCarePlan(plant, problem)
+    );
   }
 }
