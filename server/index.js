@@ -20,6 +20,20 @@ const MAX_PROBLEM_LENGTH = 500;
 app.use(cors());
 app.use(express.json({ limit: "10kb" }));
 
+// Ensure all responses are JSON with proper content-type
+app.use((req, res, next) => {
+  res.setHeader("Content-Type", "application/json");
+  next();
+});
+
+// Handle JSON parsing errors
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    return res.status(400).json({ error: "Invalid JSON in request body." });
+  }
+  next(err);
+});
+
 const apiKey = process.env.GEMINI_API_KEY;
 
 if (!apiKey) {
@@ -128,7 +142,10 @@ Important:
   } catch (error) {
     console.error("AI error:", error);
 
-    const fallbackPlan = buildFallbackCarePlan(plant, problem);
+    // Ensure we always return a valid fallback response with proper data
+    const safePlant = typeof plant === "string" ? plant : "your plant";
+    const safeProblem = typeof problem === "string" ? problem : "";
+    const fallbackPlan = buildFallbackCarePlan(safePlant, safeProblem);
     res.status(200).json(fallbackPlan);
   }
 });
