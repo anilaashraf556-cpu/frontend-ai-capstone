@@ -15,7 +15,7 @@ const app = express();
 
 // Basic API protection
 const MAX_PLANT_LENGTH = 100;
-const MAX_PROBLEM_LENGTH = 1000;
+const MAX_PROBLEM_LENGTH = 500;
 
 app.use(cors());
 app.use(express.json({ limit: "10kb" }));
