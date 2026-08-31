@@ -20,6 +20,41 @@ const MAX_PROBLEM_LENGTH = 500;
 app.use(cors());
 app.use(express.json({ limit: "10kb" }));
 
+// Simple in-memory rate limiter: 10 requests per minute per IP
+const rateLimitStore = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const limit = 10; // requests per minute
+  const window = 60000; // 1 minute in ms
+
+  if (!rateLimitStore.has(ip)) {
+    rateLimitStore.set(ip, []);
+  }
+
+  const timestamps = rateLimitStore.get(ip);
+  const recentRequests = timestamps.filter((t) => now - t < window);
+
+  if (recentRequests.length >= limit) {
+    return true;
+  }
+
+  recentRequests.push(now);
+  rateLimitStore.set(ip, recentRequests);
+  return false;
+}
+
+// Rate limit middleware
+app.use((req, res, next) => {
+  const clientIp = req.ip || req.connection.remoteAddress || "unknown";
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({
+      error: "Too many requests. Please wait before trying again.",
+    });
+  }
+  next();
+});
+
 // Ensure all responses are JSON with proper content-type
 app.use((req, res, next) => {
   res.setHeader("Content-Type", "application/json");
