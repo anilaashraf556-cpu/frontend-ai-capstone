@@ -220,7 +220,7 @@ The application is deployed on Vercel.
 
 Production URL:
 
-https://frontend-ai-capstone-tau.vercel.app/
+https://frontend-ai-capstone-liart.vercel.app/
 
 The production API uses the `GEMINI_API_KEY` environment variable configured in Vercel.
 
@@ -336,6 +336,185 @@ Personalized Plant Care Plan
 ## 🎯 Assignment 8.1 Demo
 
 A 3–5 minute live demonstration accompanies this README. The demo shows the complete PlantCare AI workflow, explains one important design decision, and discusses the current limitation that the application accepts text input but does not yet support plant-image uploads.
+
+# PlantCare AI
+
+PlantCare AI is a web app that helps users get a simple plant care plan by entering a plant name and a short description of the problem.
+
+The app uses an AI API to generate the care plan. It also has input validation and API protection to reduce unnecessary API usage.
+
+## Live Demo
+
+https://frontend-ai-capstone-liart.vercel.app/
+## What the App Does
+
+The user enters:
+
+* Plant name
+* A short description of the plant problem
+
+After submitting the form, the app sends the information to the API. The API sends the request to the AI service and returns a care plan for the plant.
+
+## Features
+
+* Generate plant care plans using AI
+* Simple and easy-to-use interface
+* Plant name validation
+* Description length limit
+* Request body size limit
+* Rate limiting to reduce API abuse
+* Error handling for invalid requests
+* Deployed on Vercel
+
+## Screenshots
+
+### PlantCare AI
+
+Add a screenshot of the main application here.
+
+```text
+![PlantCare AI](screenshots/home.png)
+```
+
+### Generated Care Plan
+
+Add a screenshot showing a generated care plan here.
+
+```text
+![Generated Care Plan](screenshots/care-plan.png)
+```
+
+## Environment Variables
+
+| Variable                       | Purpose                       | Required |
+| ------------------------------ | ----------------------------- | -------- |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Used to access the AI service | Yes      |
+
+## Project Structure
+
+The main parts of the project are:
+
+```text
+Frontend
+   |
+   v
+Care Plan API
+   |
+   +--> Input validation
+   |
+   +--> Rate limiting
+   |
+   v
+AI service
+   |
+   v
+Generated care plan
+```
+
+The frontend collects the user's information and sends it to the care-plan API.
+
+The API checks the request before sending it to the AI service. If the request is valid, the AI service generates the care plan and the result is shown to the user.
+
+## API Protection
+
+I added several protections to the API so that invalid or unnecessarily large requests do not use API credits.
+
+### Rate Limiting
+
+The API allows up to **10 requests per minute per IP address**.
+
+If the limit is reached, the API returns:
+
+```text
+HTTP 429
+```
+
+### Input Limits
+
+The API has these limits:
+
+| Input               |          Limit |
+| ------------------- | -------------: |
+| Plant name          | 100 characters |
+| Problem/description | 500 characters |
+| Request body        |          10 KB |
+
+If the request is too large, the API returns:
+
+```text
+HTTP 413
+```
+
+Invalid input returns:
+
+```text
+HTTP 400
+```
+
+The API also has a `maxDuration` of **60 seconds** to prevent a serverless request from running for too long.
+
+## Testing
+
+I tested the API with these cases:
+
+* Normal plant name and description — passed
+* Empty plant name — rejected
+* Plant name longer than 100 characters — rejected
+* Description longer than 500 characters — rejected
+* Description with 500 or fewer characters — accepted
+
+## Browser Testing
+
+I tested the production website in:
+
+* Microsoft Edge — passed
+* Google Chrome — passed
+* Firefox — passed
+
+## Deployment
+
+The project is deployed using Vercel.
+
+The production version can be accessed here:
+
+https://frontend-ai-capstone-liart.vercel.app/
+
+## Important Decisions
+
+I kept the input limits small because the application only needs short plant information.
+
+The API checks the input before calling the AI service. This helps avoid sending invalid requests and wasting API credits.
+
+I also added rate limiting because the API is publicly accessible and should not allow unlimited requests from the same IP address.
+
+## How AI Tools Were Used
+
+I used AI-assisted development during this project to help with parts of the development process.
+
+I used AI tools to:
+
+* Understand the project requirements
+* Help build and improve the frontend
+* Work on the AI API integration
+* Find and fix development errors
+* Add input validation and API protection
+* Suggest testing cases
+* Review the implementation and explain errors
+
+I still tested the application myself and checked the changes before using them.
+
+## Future Improvements
+
+Some things I could add later are:
+
+* User accounts
+* Saved plant care plans
+* More detailed plant information
+* Better rate limiting using a persistent store
+* More plant-specific recommendations
+* Improved mobile UI
+
+
 
 
 
